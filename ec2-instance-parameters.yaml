@@ -30,6 +30,16 @@ Parameters:
     MinValue: 1150
     MaxValue: 65535
 
+  DBPwd:
+    NoEcho: true
+    Description: Database Password for EC2 Instance
+    Type: String
+
+  DbSubnetIpBlocks:
+    Description: "Comma-delimited list of three CIDR blocks"
+    Type: CommaDelimitedList
+    Default: "10.0.48.0/24, 10.0.112.0/24, 10.0.176.0/24"
+
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH Access to the Instances.
     Type: AWS::EC2::KeyPair::KeyName
@@ -70,3 +80,24 @@ Resources:
           ToPort: !Ref SecurityGroupToPort
           IpProtocol: tcp
       VpcId: !Ref VPC
+
+  DbSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      # the select function allows us to select across a list
+      CidrBlock: !Select [0, !Ref DbSubnetIpBlocks]
+
+  DbSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      # the select function allows us to select across a list
+      CidrBlock: !Select [1, !Ref DbSubnetIpBlocks]
+
+  DbSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      # the select function allows us to select across a list
+      CidrBlock: !Select [2, !Ref DbSubnetIpBlocks]
