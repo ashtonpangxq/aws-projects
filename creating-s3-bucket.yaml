@@ -1,6 +1,12 @@
+Parameters:
+  BucketName:
+    Type: String
+
 Resources:
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: PublicRead
-      BucketName: "my-aws-cloud-formation-bucket"
+      #AccessControl: PublicRead
+      BucketName: !Ref BucketName
+      DeletionPolicy: Retain
+      UpdateReplacePolicy: Retain
